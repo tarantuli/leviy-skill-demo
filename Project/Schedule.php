@@ -16,6 +16,7 @@ class Schedule implements Iterator
     private array $daySchedules;
     private Date $from;
     private int $iteratorIndex;
+    private DatePeriod $period;
     private Date $till;
 
 
@@ -25,8 +26,9 @@ class Schedule implements Iterator
 
     public function __construct(Date $from, Date $till)
     {
-        $this->from = $from;
-        $this->till = $till;
+        $this->from   = $from;
+        $this->till   = $till;
+        $this->period = new DatePeriod($from, $till);
 
         $this->initializeDaySchedules();
     }
@@ -39,7 +41,7 @@ class Schedule implements Iterator
     public function getDaySchedule(Date $date): DaySchedule
     {
         if (!array_key_exists((string) $date, $this->dateToIndex)) {
-            throw new InvalidInputException($date, 'date');
+            throw new InvalidInputException($date, 'date in this schedule');
         }
 
         return $this->daySchedules[$this->dateToIndex[(string) $date]];
@@ -58,6 +60,11 @@ class Schedule implements Iterator
     public function next(): void
     {
         ++$this->iteratorIndex;
+    }
+
+    public function getPeriod(): DatePeriod
+    {
+        return $this->period;
     }
 
     public function rewind(): void

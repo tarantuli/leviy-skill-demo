@@ -2,7 +2,6 @@
 namespace Project;
 
 use Shared\DateControl\Date;
-use Shared\DateControl\Duration;
 
 class DaySchedule
 {
@@ -43,12 +42,13 @@ class DaySchedule
         $this->taskDuration += $task->getDuration();
     }
 
-    public function toArray(): array
+    public function getTasks(): array
     {
-        return [
-            'date'     => $this->date,
-            'tasks'    => implode(', ', $this->tasks),
-            'duration' => (new Duration($this->taskDuration))->toHHMM(),
-        ];
+        return $this->tasks;
+    }
+
+    public function getTotalDuration(): int
+    {
+        return $this->taskDuration;
     }
 }

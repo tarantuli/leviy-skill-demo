@@ -2,7 +2,6 @@
 namespace Project;
 
 use Shared\DateControl\Date;
-use Shared\DateControl\DatePeriod;
 use Shared\Providers\AbstractSingletonProvider;
 
 class ScheduleProvider extends AbstractSingletonProvider
@@ -32,6 +31,7 @@ class ScheduleProvider extends AbstractSingletonProvider
         // If the results aren't cached or stored on a day-by-day basis, it's more efficient to determine tasks
         // per week and per month. Otherwise, tasks should be determined for each date
         $this->addVacuumingAndFridgeCleaningTasks();
+        $this->addWindowCleaningTasks();
 
         return $this->schedule;
     }
@@ -54,7 +54,7 @@ class ScheduleProvider extends AbstractSingletonProvider
     {
         $firstDay = $this->schedule->getFrom();
         $lastDay  = $this->schedule->getTill();
-        $period   = new DatePeriod($firstDay, $lastDay);
+        $period   = $this->schedule->getPeriod();
         $lastYearweekNumber = $lastDay->getWeek()->getYearweekNumber();
         $this->fridgeCleaningAddedForMonth = null;
 
@@ -72,6 +72,36 @@ class ScheduleProvider extends AbstractSingletonProvider
 
             if ($period->contains($thursday)) {
                 $this->processVacuumingDay($thursday);
+            }
+        }
+    }
+
+    private function addWindowCleaningTasks(): void
+    {
+        $period          = $this->schedule->getPeriod();
+        $firstMonth      = $this->schedule->getFrom()->getMonth();
+        $lastMonthnumber = $this->schedule->getTill()->getMonth()->getYearmonthNumber();
+
+        for ($month = $firstMonth;
+                $month->getYearmonthNumber() <= $lastMonthnumber;
+                $month = $month->getNext())
+        {
+            // The last working day of a month is always part of the last week of the month
+            $lastWeek = $month->getLastDay()->getWeek();
+
+            // Find the last workday in that week that's part of this month and also part of the schedule period
+            for ($weekday = 5; $weekday >= 1; --$weekday) {
+                $workingDay = $lastWeek->getWeekday($weekday);
+
+                if (!$period->contains($workingDay)) {
+                    continue;
+                }
+
+                if ($workingDay->getMonth()->getYearmonthNumber() === $month->getYearmonthNumber()) {
+                    $this->schedule->addTask($workingDay, new Tasks\WindowCleaningTask());
+
+                    break;
+                }
             }
         }
     }
