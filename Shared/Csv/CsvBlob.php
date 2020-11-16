@@ -1,5 +1,4 @@
 <?php
-
 namespace Shared\Csv;
 
 class CsvBlob
@@ -9,9 +8,10 @@ class CsvBlob
      *********************/
 
     /**
-     * @param iterable $rows
-     * @param bool $includeHeaderRow
-     * @return static
+     * @param  iterable  $rows
+     * @param  bool      $includeHeaderRow
+     *
+     * @return  static
      */
     public static function fromIterable(iterable $rows, bool $includeHeaderRow = true): self
     {
@@ -90,5 +90,4 @@ class CsvBlob
         $this->content .= implode($this->separator, $row);
         $this->content .= CRLF;
     }
-
 }

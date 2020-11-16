@@ -16,6 +16,17 @@ class ScheduleProvider extends AbstractSingletonProvider
 
         // If the results aren't cached or stored on a day-by-day basis, it's more efficient to determine tasks
         // per week and per month. Otherwise, tasks should be determined for each date
+        $this->addVacuumingTasks($schedule);
+        $this->addWindowCleaningTasks($schedule);
+
         return $schedule;
+    }
+
+    private function addVacuumingTasks(Schedule $schedule)
+    {
+    }
+
+    private function addWindowCleaningTasks(Schedule $schedule)
+    {
     }
 }
