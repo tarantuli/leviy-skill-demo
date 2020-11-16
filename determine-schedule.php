@@ -1,18 +1,22 @@
 <?php
 use Project\ScheduleProvider;
 use Shared\Csv\CsvBlob;
-use Shared\DateControl\Week;
+use Shared\DateControl\Date;
 use Shared\FileControl\File;
 
 require_once 'require_me.php';
 
 try
 {
-    // Generate a schedule for the period starting with the current Monday, ending in twelve weeks
-    $schedule = ScheduleProvider::get()->generate(
-        Week::today()->getMonday(),
-        Week::today()->getSunday()->getOther(+84)
-    );
+    // There's multiple ways to interpret "the next three months". (A) from today till the same day of the month, two months in advance,
+    // (B) the current month and the two months following it, (C) the current week starting on Monday till the Sunday twelve weeks in advance
+    // For now, I've opted for option A
+    $from = Date::today();
+    $till = Date::today();
+
+    $till->addMonths(2);
+
+    $schedule = ScheduleProvider::get()->generate($from, $till);
 
     // Prepare data for Csv\CsvBlob
     $printableData = [];

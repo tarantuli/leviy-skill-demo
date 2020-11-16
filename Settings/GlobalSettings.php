@@ -13,7 +13,7 @@ class GlobalSettings
     public function additionalNamespaces(): array
     {
         return [
-            'Model'    => ['Model'],
+            'Project'  => ['Project'],
             'Settings' => ['Settings'],
         ];
     }

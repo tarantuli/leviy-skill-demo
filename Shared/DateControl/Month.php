@@ -432,6 +432,11 @@ class Month implements Iterator
         return false;
     }
 
+    public function getValue(): int
+    {
+        return $this->month;
+    }
+
     /**
      * Returns a week in this month
      *

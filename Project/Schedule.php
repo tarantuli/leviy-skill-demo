@@ -38,7 +38,7 @@ class Schedule implements Iterator
 
     public function getDaySchedule(Date $date): DaySchedule
     {
-        if (!array_key_exists($date, $this->dateToIndex)) {
+        if (!array_key_exists((string) $date, $this->dateToIndex)) {
             throw new InvalidInputException($date, 'date');
         }
 
@@ -65,6 +65,11 @@ class Schedule implements Iterator
         $this->iteratorIndex = 0;
     }
 
+    public function addTask(Date $date, Tasks\Interfaces\TaskInterface $task)
+    {
+        $this->getDaySchedule($date)->addTask($task);
+    }
+
     public function getTill(): Date
     {
         return $this->till;
@@ -82,8 +87,8 @@ class Schedule implements Iterator
         $i = 0;
 
         foreach (new DatePeriod($this->from, $this->till) as $date) {
-            $this->daySchedules[$i]   = new DaySchedule($date);
-            $this->dateToIndex[$date] = $i;
+            $this->daySchedules[$i] = new DaySchedule($date);
+            $this->dateToIndex[(string) $date] = $i;
 
             $i++;
         }

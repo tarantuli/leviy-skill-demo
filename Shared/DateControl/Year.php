@@ -277,6 +277,11 @@ class Year implements Iterator, CastableToIntInterface
         return false;
     }
 
+    public function getValue(): int
+    {
+        return $this->year;
+    }
+
     /**
      * Returns a week in this year
      *

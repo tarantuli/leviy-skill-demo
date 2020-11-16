@@ -37,10 +37,10 @@ class DaySchedule
         return $this->date;
     }
 
-    public function addTask(string $description, int $duration): void
+    public function addTask(Tasks\Interfaces\TaskInterface $task): void
     {
-        $this->tasks[]       = $description;
-        $this->taskDuration += $duration;
+        $this->tasks[]       = $task->getDutchDescription();
+        $this->taskDuration += $task->getDuration();
     }
 
     public function toArray(): array

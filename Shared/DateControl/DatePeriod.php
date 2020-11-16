@@ -127,6 +127,12 @@ class DatePeriod implements Iterator
         $this->to   = $to;
     }
 
+    public function contains(Date $date): bool
+    {
+        return $date->getTimestamp() >= $this->from->getTimestamp()
+            && $date->getTimestamp() <= $this->to->getTimestamp();
+    }
+
     /**
      * Iteration method
      *

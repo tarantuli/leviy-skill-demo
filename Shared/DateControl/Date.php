@@ -296,6 +296,14 @@ class Date implements Iterator
      */
     public function __construct($year, $month, $day)
     {
+        if ($year instanceof Year) {
+            $year = $year->getValue();
+        }
+
+        if ($month instanceof Month) {
+            $month = $month->getValue();
+        }
+
         self::checkIsInt($year);
         self::checkIsInt($month);
         self::checkIsInt($day);
@@ -444,6 +452,13 @@ class Date implements Iterator
     public function getMonthNumber(): int
     {
         return $this->month;
+    }
+
+    public function addMonths(int $number): void
+    {
+        $this->month += $number;
+
+        $this->recalibrate();
     }
 
     /**
