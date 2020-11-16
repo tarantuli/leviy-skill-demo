@@ -1,8 +1,9 @@
 <?php
-namespace Shared;
-
 use Project\GlobalSettings;
 use Project\LocalSettings;
+use Shared\Logging\ErrorControl;
+use Shared\Logging\ToFileLogger;
+use Shared\Shared;
 
 
 /***************
@@ -42,11 +43,11 @@ if (file_exists('vendor/autoload.php')) {
 ***************************/
 
 // Logging and error control
-$errorLogger = new Logging\ToFileLogger($localSettings->getLogfilesDirectory());
+$errorLogger = new ToFileLogger($localSettings->getLogfilesDirectory());
 
-$errorLogger->setTargetFileType(Logging\ToFileLogger::TARGET_FILE_TYPE_DATE);
+$errorLogger->setTargetFileType(ToFileLogger::TARGET_FILE_TYPE_DATE);
 
-$errorControl = Logging\ErrorControl::get();
+$errorControl = ErrorControl::get();
 
 $errorControl->setWorkingDirectory(__DIR__);
 $errorControl->setErrorLogger($errorLogger);
