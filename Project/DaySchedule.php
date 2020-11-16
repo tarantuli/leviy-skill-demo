@@ -11,21 +11,17 @@ class DaySchedule
 
     private Date $date;
 
-    private int $taskDuration = 0;
-
     /**
      * @var  string[]
      */
-    private array $tasks = [];
+    private array $taskDescriptions = [];
+    private int $taskDuration = 0;
 
 
     /************************
      *   Instance methods   *
      ***********************/
 
-    /**
-     * @param  Date  $date
-     */
     public function __construct(Date $date)
     {
         $this->date = $date;
@@ -38,13 +34,14 @@ class DaySchedule
 
     public function addTask(Tasks\Interfaces\TaskInterface $task): void
     {
-        $this->tasks[]       = $task->getDutchDescription();
+        // Flattened for this demo; a more complex implementation would store the "raw" tasks
+        $this->taskDescriptions[] = $task->getDutchDescription();
         $this->taskDuration += $task->getDuration();
     }
 
-    public function getTasks(): array
+    public function getTaskDescriptions(): array
     {
-        return $this->tasks;
+        return $this->taskDescriptions;
     }
 
     public function getTotalDuration(): int

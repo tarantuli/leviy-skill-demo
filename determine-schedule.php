@@ -25,7 +25,7 @@ try
     foreach ($schedule as $daySchedule) {
         $printableData[] = [
             'Datum'         => $daySchedule->getDate(),
-            'Werkzaamheden' => implode(', ', $daySchedule->getTasks()),
+            'Werkzaamheden' => implode(', ', $daySchedule->getTaskDescriptions()),
             'Totale duur (uu:mm)'
                             => (new Duration($daySchedule->getTotalDuration()))->toHHMM(),
         ];

@@ -18,18 +18,10 @@ class ScheduleProvider extends AbstractSingletonProvider
      *   Instance methods   *
      ***********************/
 
-    /**
-     * @param  Date  $from
-     * @param  Date  $till
-     *
-     * @return  Schedule
-     */
     public function generate(Date $from, Date $till): Schedule
     {
         $this->schedule = new Schedule($from, $till);
 
-        // If the results aren't cached or stored on a day-by-day basis, it's more efficient to determine tasks
-        // per week and per month. Otherwise, tasks should be determined for each date
         $this->addVacuumingAndFridgeCleaningTasks();
         $this->addWindowCleaningTasks();
 
@@ -43,7 +35,7 @@ class ScheduleProvider extends AbstractSingletonProvider
         $month = (string) $date->getMonth();
 
         if ($month !== $this->fridgeCleaningAddedForMonth) {
-            // This is the first vacuuming day in this month, also clean the fridge
+            // This is the first vacuuming day in this month: also clean the fridge
             $this->schedule->addTask($date, new Tasks\FridgeCleaningTask());
 
             $this->fridgeCleaningAddedForMonth = $month;
@@ -58,6 +50,8 @@ class ScheduleProvider extends AbstractSingletonProvider
         $lastYearweekNumber = $lastDay->getWeek()->getYearweekNumber();
         $this->fridgeCleaningAddedForMonth = null;
 
+        // Iterate over the weeks spanning the period, checking for each Tuesday and Thursday
+        // whether they're within the period
         for ($week = $firstDay->getWeek();
                 $week->getYearweekNumber() <= $lastYearweekNumber;
                 $week = $week->getNext())
@@ -86,10 +80,11 @@ class ScheduleProvider extends AbstractSingletonProvider
                 $month->getYearmonthNumber() <= $lastMonthnumber;
                 $month = $month->getNext())
         {
-            // The last working day of a month is always part of the last week of the month
+            // The last working day of a month is always found in the last week of the month
             $lastWeek = $month->getLastDay()->getWeek();
 
-            // Find the last workday in that week that's part of this month and also part of the schedule period
+            // Find the last workday in that week that's part of this month
+            // and also part of the schedule period
             for ($weekday = 5; $weekday >= 1; --$weekday) {
                 $workingDay = $lastWeek->getWeekday($weekday);
 

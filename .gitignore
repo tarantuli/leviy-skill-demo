@@ -1,6 +1,6 @@
 .idea/
-logs/
-output-files/
+logs/*.log
+output-files/*.csv
 vendor/
 Settings/LocalSettings.php
 composer.lock
