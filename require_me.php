@@ -1,6 +1,6 @@
 <?php
-use Project\GlobalSettings;
-use Project\LocalSettings;
+use Settings\GlobalSettings;
+use Settings\LocalSettings;
 use Shared\Logging\ErrorControl;
 use Shared\Logging\ToFileLogger;
 use Shared\Shared;
@@ -10,9 +10,9 @@ use Shared\Shared;
 *   Settings   *
 ***************/
 
-require_once 'Project/Interfaces/LocalSettingsInterface.php';
-require_once 'Project/LocalSettings.php';
-require_once 'Project/GlobalSettings.php';
+require_once 'Settings/Interfaces/LocalSettingsInterface.php';
+require_once 'Settings/LocalSettings.php';
+require_once 'Settings/GlobalSettings.php';
 
 $localSettings  = new LocalSettings();
 $globalSettings = new GlobalSettings();

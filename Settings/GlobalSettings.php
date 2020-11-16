@@ -1,5 +1,5 @@
 <?php
-namespace Project;
+namespace Settings;
 
 class GlobalSettings
 {
@@ -13,8 +13,8 @@ class GlobalSettings
     public function additionalNamespaces(): array
     {
         return [
-            'Model'   => ['Model'],
-            'Project' => ['Project'],
+            'Model'    => ['Model'],
+            'Settings' => ['Settings'],
         ];
     }
 

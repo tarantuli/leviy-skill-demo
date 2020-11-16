@@ -1,5 +1,5 @@
 .idea/
 logs/
 vendor/
-Project/LocalSettings.php
+Settings/LocalSettings.php
 composer.lock

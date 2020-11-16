@@ -1,5 +1,5 @@
 <?php
-namespace Project\Interfaces;
+namespace Settings\Interfaces;
 
 interface LocalSettingsInterface
 {
