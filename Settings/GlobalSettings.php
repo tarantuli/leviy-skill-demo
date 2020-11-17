@@ -17,20 +17,4 @@ class GlobalSettings
             'Settings' => ['Settings'],
         ];
     }
-
-    /**
-     * @return  string[]
-     */
-    public function pathToClassMapping(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return  string[]
-     */
-    public function publicApiPaths(): array
-    {
-        return [];
-    }
 }

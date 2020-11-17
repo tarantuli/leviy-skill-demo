@@ -1,0 +1,19 @@
+<?php
+namespace Settings;
+
+class LocalSettings implements Interfaces\LocalSettingsInterface
+{
+    /************************
+     *   Instance methods   *
+     ***********************/
+
+    public function getLogfilesDirectory()
+    {
+        return 'logs';
+    }
+
+    public function getPathToSharedClasses()
+    {
+        return 'Shared';
+    }
+}

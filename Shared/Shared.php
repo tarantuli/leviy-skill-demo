@@ -157,22 +157,16 @@ class Shared
      * keys
      *
      * @return  string[]
-     *
-     * @throws  Exceptions\ClassNotInitializedException
      */
     public function getClassFiles(): array
     {
-        if (!$loader = $this->getAutoloader()) {
-            throw new Exceptions\ClassNotInitializedException(static::class);
-        }
-
         if ($this->classFiles !== null) {
             return $this->classFiles;
         }
 
         $classFiles = [];
 
-        foreach ($psr4Prefixes = $loader->getPrefixesPsr4() as $rootPrefix => $directories) {
+        foreach ($psr4Prefixes = $this->loader->getPrefixesPsr4() as $rootPrefix => $directories) {
             foreach ($directories as $directory) {
                 $directory = FileControl\File::normalizePath($directory);
                 $directoryLength = strlen($directory);
@@ -273,16 +267,10 @@ class Shared
      * Returns the registered namespaces
      *
      * @return  array
-     *
-     * @throws  Exceptions\ClassNotInitializedException
      */
     public function getNamespaces(): array
     {
-        if (!$loader = $this->getAutoloader()) {
-            throw new Exceptions\ClassNotInitializedException(static::class);
-        }
-
-        return array_keys($loader->getPrefixesPsr4());
+        return array_keys($this->loader->getPrefixesPsr4());
     }
 
     /**

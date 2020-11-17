@@ -34,7 +34,7 @@ class DaySchedule
 
     public function addTask(Tasks\Interfaces\TaskInterface $task): void
     {
-        // Flattened for this demo; a more complex implementation would store the "raw" tasks
+        // Flattened for this demo; a more complex implementation would store the "raw" task parameters
         $this->taskDescriptions[] = $task->getDutchDescription();
         $this->taskDuration += $task->getDuration();
     }
