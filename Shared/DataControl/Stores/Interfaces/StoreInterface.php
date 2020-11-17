@@ -2,7 +2,6 @@
 namespace Shared\DataControl\Stores\Interfaces;
 
 use Shared\Databases\Interfaces\TableInterface;
-use Shared\Exceptions\InvalidInputException;
 
 interface StoreInterface
 {
@@ -25,8 +24,6 @@ interface StoreInterface
      * @param  int|null  $id
      *
      * @return  string|null
-     *
-     * @throws  InvalidInputException
      */
     public function getString(?int $id): ?string;
 

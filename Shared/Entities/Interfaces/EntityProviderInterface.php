@@ -1,7 +1,6 @@
 <?php
 namespace Shared\Entities\Interfaces;
 
-use Exception;
 use Shared\DataControl\Stores\Interfaces\StoreInterface;
 use Shared\Databases\Interfaces\TableInterface;
 use Shared\Types\Interfaces\TypeInterface;
@@ -92,8 +91,6 @@ interface EntityProviderInterface
      * @param  array  $data
      *
      * @return  mixed
-     *
-     * @throws  Exception
      */
     public function createInstance(array $data = []);
 

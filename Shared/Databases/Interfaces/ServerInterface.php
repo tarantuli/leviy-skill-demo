@@ -1,10 +1,6 @@
 <?php
 namespace Shared\Databases\Interfaces;
 
-use Shared\Databases\Exceptions\DatabaseSelectionException;
-use Shared\Databases\Exceptions\QueryException;
-use Shared\Databases\Exceptions\TableSelectionException;
-
 /**
  * (summary missing)
  */
@@ -49,8 +45,6 @@ interface ServerInterface
      * @param  string  $database
      *
      * @return  ServerInterface
-     *
-     * @throws  DatabaseSelectionException
      */
     public function setDatabase(string $database): self;
 
@@ -69,8 +63,6 @@ interface ServerInterface
      * @param  mixed[]  $arguments
      *
      * @return  DatasetInterface|false
-     *
-     * @throws  QueryException
      */
     public function execute(string $query, array $arguments = []);
 
@@ -150,8 +142,6 @@ interface ServerInterface
      * @param  string  $table
      *
      * @return  TableInterface
-     *
-     * @throws  TableSelectionException
      */
     public function getTable(string $table): TableInterface;
 
