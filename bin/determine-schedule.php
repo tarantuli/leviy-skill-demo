@@ -5,7 +5,7 @@ use Shared\DateControl\Date;
 use Shared\DateControl\Duration;
 use Shared\FileControl\File;
 
-require_once 'require_me.php';
+require_once __DIR__ . '/../require_me.php';
 
 try
 {
