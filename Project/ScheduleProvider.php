@@ -2,6 +2,7 @@
 namespace Project;
 
 use Shared\DateControl\Date;
+use Shared\DateControl\Month;
 use Shared\Providers\AbstractSingletonProvider;
 
 class ScheduleProvider extends AbstractSingletonProvider
@@ -10,7 +11,6 @@ class ScheduleProvider extends AbstractSingletonProvider
      *   Instance variables   *
      *************************/
 
-    private ?string $fridgeCleaningAddedForMonth;
     private Schedule $schedule;
 
 
@@ -22,33 +22,61 @@ class ScheduleProvider extends AbstractSingletonProvider
     {
         $this->schedule = new Schedule($from, $till);
 
-        $this->addVacuumingAndFridgeCleaningTasks();
+        $this->addVacuumingCleaningTasks();
+        $this->addFridgeCleaningTasks();
         $this->addWindowCleaningTasks();
 
         return $this->schedule;
     }
 
-    private function processVacuumingDay(Date $date): void
+    private function addFridgeCleaningTasks()
     {
-        $this->schedule->addTask($date, new Tasks\VacuumingTask());
+        $period          = $this->schedule->getPeriod();
+        $firstMonth      = $this->schedule->getFrom()->getMonth();
+        $lastMonthnumber = $this->schedule->getTill()->getMonth()->getYearmonthNumber();
 
-        $month = (string) $date->getMonth();
+        for ($month = $firstMonth;
+                $month->getYearmonthNumber() <= $lastMonthnumber;
+                $month = $month->getNext())
+        {
+            $month->setIntervalType(Month::AS_WEEKS);
 
-        if ($month !== $this->fridgeCleaningAddedForMonth) {
-            // This is the first vacuuming day in this month: also clean the fridge
-            $this->schedule->addTask($date, new Tasks\FridgeCleaningTask());
+            foreach ($month as $week) {
+                $tuesday = $week->getTuesday();
 
-            $this->fridgeCleaningAddedForMonth = $month;
+                if ($tuesday->getMonth()->getYearmonthNumber() === $month->getYearmonthNumber()) {
+                    // We found the first Tuesday or Thursday of this month
+                    if ($period->contains($tuesday)) {
+                        // ... but only add the task if it's part of our selected period
+                        $this->schedule->addTask($tuesday, new Tasks\FridgeCleaningTask());
+                    }
+
+                    // We're done with this month
+                    continue 2;
+                }
+
+                $thursday = $week->getThursday();
+
+                if ($thursday->getMonth()->getYearmonthNumber() === $month->getYearmonthNumber()) {
+                    // We found the first Tuesday or Thursday of this month
+                    if ($period->contains($thursday)) {
+                        // ... but only add the task if it's part of our selected period
+                        $this->schedule->addTask($thursday, new Tasks\FridgeCleaningTask());
+                    }
+
+                    // We're done with this month
+                    continue 2;
+                }
+            }
         }
     }
 
-    private function addVacuumingAndFridgeCleaningTasks(): void
+    private function addVacuumingCleaningTasks(): void
     {
         $firstDay = $this->schedule->getFrom();
         $lastDay  = $this->schedule->getTill();
         $period   = $this->schedule->getPeriod();
         $lastYearweekNumber = $lastDay->getWeek()->getYearweekNumber();
-        $this->fridgeCleaningAddedForMonth = null;
 
         // Iterate over the weeks spanning the period, checking for each Tuesday and Thursday
         // whether they're within the period
@@ -59,13 +87,13 @@ class ScheduleProvider extends AbstractSingletonProvider
             $tuesday = $week->getTuesday();
 
             if ($period->contains($tuesday)) {
-                $this->processVacuumingDay($tuesday);
+                $this->schedule->addTask($tuesday, new Tasks\VacuumingTask());
             }
 
             $thursday = $week->getThursday();
 
             if ($period->contains($thursday)) {
-                $this->processVacuumingDay($thursday);
+                $this->schedule->addTask($thursday, new Tasks\VacuumingTask());
             }
         }
     }
